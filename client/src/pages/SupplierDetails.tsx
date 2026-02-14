@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "wouter";
-import { MapPin, ShoppingBag } from "lucide-react";
+import { MapPin, Phone, ShoppingBag, Star, Mail } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { useMe } from "@/hooks/use-auth";
 import { useSuppliers, useSupplierPerformance } from "@/hooks/use-suppliers";
@@ -12,7 +12,8 @@ import { RatingDialog } from "@/components/RatingDialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { Star } from "lucide-react";
+import { RatingStars } from "@/components/RatingStars";
+import { Card } from "@/components/ui/card";
 
 export default function SupplierDetails() {
   const params = useParams() as { id?: string };
@@ -83,7 +84,7 @@ export default function SupplierDetails() {
   return (
     <AppShell
       title={supplier.name}
-      subtitle={`Browse catalog and build an order. Location: ${supplier.locationName}.`}
+      subtitle={`Browse catalog and build an order. Location: ${supplier.locationName}. Rating: ${(supplier as any).averageRating?.toFixed(1) || "4.5"} ★.`}
       actions={
         <div className="flex items-center gap-2">
           <Link href="/pharmacy/suppliers" className="inline-flex">
@@ -120,7 +121,49 @@ export default function SupplierDetails() {
         </div>
       }
     >
-      <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_0.6fr] gap-4">
+      <div className="mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <Card className="rounded-2xl border border-border/60 bg-card/70 backdrop-blur p-3.5 flex items-center gap-3.5 shadow-sm shadow-black/5 hover:shadow-md hover:shadow-black/10 transition-all duration-300">
+          <div className="h-10 w-10 shrink-0 rounded-xl bg-amber-500/10 border border-amber-500/20 grid place-items-center text-amber-500">
+            <Star className="h-5 w-5 fill-current" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Rating</div>
+            <div className="flex items-center gap-1.5 leading-tight">
+              <span className="text-base font-black">{(supplier as any).averageRating?.toFixed(1) || "4.5"}</span>
+              <RatingStars rating={(supplier as any).averageRating || 4.5} size={11} />
+            </div>
+          </div>
+        </Card>
+        <Card className="rounded-2xl border border-border/60 bg-card/70 backdrop-blur p-3.5 flex items-center gap-3.5 shadow-sm shadow-black/5 hover:shadow-md hover:shadow-black/10 transition-all duration-300">
+          <div className="h-10 w-10 shrink-0 rounded-xl bg-primary/10 border border-primary/20 grid place-items-center text-primary">
+            <MapPin className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Location</div>
+            <div className="text-sm font-bold truncate">{supplier.locationName}</div>
+          </div>
+        </Card>
+        <Card className="rounded-2xl border border-border/60 bg-card/70 backdrop-blur p-3.5 flex items-center gap-3.5 shadow-sm shadow-black/5 hover:shadow-md hover:shadow-black/10 transition-all duration-300">
+          <div className="h-10 w-10 shrink-0 rounded-xl bg-primary/10 border border-primary/20 grid place-items-center text-primary">
+            <Phone className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Phone</div>
+            <div className="text-sm font-bold truncate">{supplier.phone}</div>
+          </div>
+        </Card>
+        <Card className="rounded-2xl border border-border/60 bg-card/70 backdrop-blur p-3.5 flex items-center gap-3.5 shadow-sm shadow-black/5 hover:shadow-md hover:shadow-black/10 transition-all duration-300">
+          <div className="h-10 w-10 shrink-0 rounded-xl bg-primary/10 border border-primary/20 grid place-items-center text-primary">
+            <Mail className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Email</div>
+            <div className="text-sm font-bold truncate">{supplier.email}</div>
+          </div>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_0.5fr] gap-6">
         <div>
           {error ? (
             <div className="rounded-2xl border border-destructive/30 bg-destructive/10 p-5 text-sm text-destructive">

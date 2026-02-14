@@ -82,7 +82,7 @@ export function AppShell({
   return (
     <div className="min-h-screen bg-mesh">
       <div className="pointer-events-none fixed inset-0 grain-overlay" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5">
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
           {/* Desktop sidebar */}
           <aside className="hidden lg:block">
@@ -90,15 +90,15 @@ export function AppShell({
               <div className="p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <div className="flex items-center gap-2.5">
-                      <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-accent text-primary-foreground shadow-lg shadow-primary/20 grid place-items-center">
-                        <BrandIcon className="h-5 w-5" />
+                    <div className="flex items-center gap-3">
+                      <div className="h-12 w-12 rounded-xl bg-black dark:bg-black/40 text-primary-foreground shadow-premium-md overflow-hidden ring-1 ring-white/10">
+                        <img src="/logo.png" alt="DAWAK Logo" className="w-full h-full object-cover" />
                       </div>
                       <div>
-                        <div className="text-lg font-semibold" style={{ fontFamily: "var(--font-serif)" }}>
-                          PharmSync
+                        <div className="text-xl font-black tracking-tighter leading-none" style={{ fontFamily: "var(--font-serif)" }}>
+                          DAWAK
                         </div>
-                        <div className="text-xs text-muted-foreground">B2B ordering console</div>
+                        <div className="text-[11px] uppercase font-bold tracking-widest text-muted-foreground/70 mt-1.5">Platform Console</div>
                       </div>
                     </div>
                     <div className="mt-4 rounded-xl border border-border/60 bg-card/60 px-3 py-2">
@@ -109,13 +109,11 @@ export function AppShell({
                       <div className="text-xs text-muted-foreground truncate">{me?.userId || "-"}</div>
                     </div>
                   </div>
-
-                  <ThemeToggle />
                 </div>
 
                 <Separator className="my-5" />
 
-                <nav className="space-y-1">
+                <nav className="space-y-1.5 p-1">
                   {nav.map((item) => {
                     const Icon = item.icon;
                     const active =
@@ -127,25 +125,27 @@ export function AppShell({
                         href={item.href}
                         data-testid={item.testId}
                         className={cn(
-                          "group flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-200",
-                          "hover:bg-primary/8 hover:shadow-sm hover:-translate-y-[1px]",
+                          "group relative flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300",
                           active
-                            ? "bg-gradient-to-r from-primary/14 to-accent/10 text-foreground border border-border/70"
-                            : "text-muted-foreground",
+                            ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
+                            : "text-muted-foreground hover:bg-primary/5 hover:text-foreground",
                         )}
                       >
-                        <span className="flex items-center gap-2.5">
+                        <span className="flex items-center gap-3">
                           <Icon
                             className={cn(
-                              "h-4.5 w-4.5 transition-colors",
-                              active ? "text-primary" : "text-muted-foreground group-hover:text-foreground",
+                              "h-5 w-5 transition-transform duration-300 group-hover:scale-110",
+                              active ? "text-primary-foreground" : "text-muted-foreground group-hover:text-primary",
                             )}
                           />
                           {item.label}
                         </span>
 
                         {item.href === "/notifications" && unread > 0 ? (
-                          <Badge className="bg-primary text-primary-foreground shadow-sm" data-testid="badge-unread">
+                          <Badge className={cn(
+                            "shadow-sm",
+                            active ? "bg-white text-primary" : "bg-primary text-primary-foreground"
+                          )} data-testid="badge-unread">
                             {unread}
                           </Badge>
                         ) : null}
@@ -154,13 +154,13 @@ export function AppShell({
                   })}
                 </nav>
 
-                <Separator className="my-5" />
+                <Separator className="my-5 opacity-50" />
 
-                <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-2">
                   <Link
                     href="/settings"
                     data-testid="nav-settings"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-border/70 bg-card/50 px-3 py-2 text-xs font-semibold text-muted-foreground hover:bg-card hover:text-foreground transition-all duration-200"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-border/50 bg-card/30 px-3 py-2.5 text-xs font-bold text-muted-foreground hover:bg-card hover:text-foreground transition-all duration-300"
                   >
                     <Settings2 className="h-4 w-4" />
                     Settings
@@ -180,12 +180,6 @@ export function AppShell({
               </div>
             </div>
 
-            <div className="mt-4 glass rounded-2xl p-4">
-              <div className="text-xs text-muted-foreground">Quick panel</div>
-              <div className="mt-2">
-                <NotificationsPanel compact />
-              </div>
-            </div>
           </aside>
 
           {/* Mobile top bar + content */}
@@ -211,7 +205,7 @@ export function AppShell({
                                 <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-sidebar-primary to-accent text-primary-foreground grid place-items-center shadow-lg shadow-black/20">
                                   <BrandIcon className="h-5 w-5" />
                                 </div>
-                                <span style={{ fontFamily: "var(--font-serif)" }}>PharmSync</span>
+                                <span style={{ fontFamily: "var(--font-serif)" }}>DAWAK</span>
                               </SheetTitle>
                               <div className="text-xs text-sidebar-foreground/70">
                                 {me?.role === "supplier" ? "Supplier Console" : "Pharmacy Console"}

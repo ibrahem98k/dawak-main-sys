@@ -1,8 +1,9 @@
-import { MapPin, Phone, Pill } from "lucide-react";
+import { MapPin, Phone, Pill, Star } from "lucide-react";
 import { Link } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Supplier } from "@shared/schema";
+import { RatingStars } from "@/components/RatingStars";
 
 export function SupplierCard({
   supplier,
@@ -23,17 +24,22 @@ export function SupplierCard({
       <div className="p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <div className="text-lg font-bold tracking-tight truncate">{supplier.name}</div>
-            <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5" />
-                {supplier.locationName}
-              </span>
-              <span className="text-muted-foreground/50">•</span>
-              <span className="inline-flex items-center gap-1.5">
-                <Phone className="h-3.5 w-3.5" />
-                {supplier.phone}
-              </span>
+            <div className="text-xl font-bold tracking-tight truncate">{supplier.name}</div>
+            <div className="mt-2.5 flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <RatingStars rating={(supplier as any).averageRating || 4.5} size={15} />
+                <span className="text-sm font-black text-amber-600/90 leading-none">{(supplier as any).averageRating?.toFixed(1) || "4.5"}</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground font-medium">
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin className="h-4 w-4 text-primary/60 shrink-0" />
+                  {supplier.locationName}
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Phone className="h-4 w-4 text-primary/60 shrink-0" />
+                  {supplier.phone}
+                </span>
+              </div>
             </div>
 
             <div className="mt-3 flex items-center gap-2">

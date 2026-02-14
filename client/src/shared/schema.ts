@@ -17,6 +17,7 @@ export const supplierSchema = z.object({
     locationName: z.string(),
     lat: z.number(),
     lng: z.number(),
+    averageRating: z.number().optional(),
 });
 export type Supplier = z.infer<typeof supplierSchema>;
 

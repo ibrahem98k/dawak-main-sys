@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
+import { motion } from "framer-motion";
 
 export function StatCard({
   label,
@@ -17,28 +18,33 @@ export function StatCard({
   testId?: string;
 }) {
   return (
-    <Card
-      className={cn(
-        "relative overflow-hidden rounded-2xl border border-border/60 bg-card/70 backdrop-blur",
-        "shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/8 transition-all duration-300 hover:-translate-y-[2px]",
-      )}
-      data-testid={testId}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, cubicBezier: [0.2, 0.9, 0.2, 1] }}
     >
-      <div className={cn("absolute inset-0 bg-gradient-to-br", gradient)} />
-      <div className="relative p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <div className="text-xs font-semibold text-muted-foreground">{label}</div>
-            <div className="mt-2 text-2xl font-extrabold tracking-tight">{value}</div>
-            {hint ? <div className="mt-1 text-xs text-muted-foreground">{hint}</div> : null}
-          </div>
-          {icon ? (
-            <div className="h-10 w-10 rounded-2xl bg-card/70 border border-border/60 grid place-items-center shadow-sm">
-              {icon}
+      <Card
+        className={cn(
+          "relative overflow-hidden rounded-3xl border-none glass-card shadow-premium-md",
+        )}
+        data-testid={testId}
+      >
+        <div className={cn("absolute inset-0 bg-gradient-to-br opacity-40", gradient)} />
+        <div className="relative p-6">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80">{label}</div>
+              <div className="mt-2 text-3xl font-extrabold tracking-tight text-gradient">{value}</div>
+              {hint ? <div className="mt-1 text-xs text-muted-foreground/70 font-medium">{hint}</div> : null}
             </div>
-          ) : null}
+            {icon ? (
+              <div className="h-12 w-12 rounded-2xl bg-white/10 dark:bg-black/10 backdrop-blur-md border border-white/20 dark:border-white/5 grid place-items-center shadow-premium-sm text-primary">
+                {icon}
+              </div>
+            ) : null}
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </motion.div>
   );
 }

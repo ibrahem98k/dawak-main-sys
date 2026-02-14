@@ -22,8 +22,8 @@ import {
   type SupplierPerformance,
 } from "@shared/schema";
 
-const LS_STATE_KEY = "pharmsync.state.v1";
-const LS_ME_KEY = "pharmsync.me.v1";
+const LS_STATE_KEY = "pharmsync.state.v2";
+const LS_ME_KEY = "pharmsync.me.v2";
 
 function nowIso() {
   return new Date().toISOString();
@@ -102,6 +102,16 @@ function seedState(): AppState {
   ].map((m) => parseWithLogging(medicineSchema, m, "seed.medicine"));
 
   const suppliers = [
+    {
+      id: uid("sup"),
+      name: "Global Biotech Supplies",
+      email: "supplier1@demo.com",
+      password: "demo1",
+      phone: "+964 780 000 0000",
+      locationName: "Mansour, Baghdad",
+      lat: 33.3152,
+      lng: 44.3661,
+    },
     {
       id: uid("sup"),
       name: "Farabi Pharma Scientific Bureau",
@@ -367,7 +377,7 @@ function seedState(): AppState {
     {
       id: uid("ntf"),
       createdAt: nowIso(),
-      title: "Welcome to PharmSync",
+      title: "Welcome to DAWAK",
       message: "Demo data is seeded. Log in as a supplier or pharmacy to explore workflows.",
       read: false,
       user: undefined,
@@ -377,7 +387,7 @@ function seedState(): AppState {
   return parseWithLogging(
     appStateSchema,
     {
-      version: 1,
+      version: 2,
       medicines,
       suppliers,
       pharmacies,
@@ -496,7 +506,7 @@ export async function authRegister(input: RegisterRequest) {
   writeMe({ role: "pharmacy", userId: pharmacy.id });
   pushNotification({
     title: "Account created",
-    message: `Welcome to PharmSync, ${pharmacy.name}. Browse suppliers and place your first order.`,
+    message: `Welcome to DAWAK, ${pharmacy.name}. Browse suppliers and place your first order.`,
     user: { role: "pharmacy", userId: pharmacy.id },
   });
   return readMe();
@@ -516,7 +526,15 @@ export async function suppliersList(input?: { search?: string }) {
     .filter((s) => (search ? `${s.name} ${s.locationName} ${s.email}`.toLowerCase().includes(search) : true))
     .map((s) => {
       const { password: _pw, ...safe } = s;
-      return safe;
+      const supplierRatings = state.ratings.filter(r => r.supplierId === s.id);
+      const avgRating = supplierRatings.length > 0
+        ? supplierRatings.reduce((sum, r) => sum + r.rating, 0) / supplierRatings.length
+        : 4.5;
+
+      return {
+        ...safe,
+        averageRating: Number(avgRating.toFixed(1)),
+      };
     });
   return list;
 }
